@@ -41,6 +41,8 @@ export default function DashboardClient({ orders }: { orders: any[] }) {
                   ? "bg-yellow-100 text-yellow-700"
                   : order.status === "Preparing"
                   ? "bg-blue-100 text-blue-700"
+                  : order.status === "Ready To Serve"
+                  ? "bg-orange-100 text-orange-700"
                   : order.status === "Completed"
                   ? "bg-green-100 text-green-700"
                   : order.status === "Rejected"
@@ -72,7 +74,12 @@ export default function DashboardClient({ orders }: { orders: any[] }) {
             >
               Preparing
             </Button>
-
+            <Button
+              onClick={() => updateStatus(order.id, "Ready To Serve")}
+              variant="primary"
+            >
+              Ready
+            </Button>
             <Button
               onClick={() => updateStatus(order.id, "Completed")}
               variant="success"

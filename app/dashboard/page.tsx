@@ -7,6 +7,8 @@ import PendingOrdersQueue from "@/components/PendingOrdersQueue";
 import AdminProtected from "@/components/AdminProtected";
 import DashboardStats from "@/components/DashboardStats";
 import AdminNavbar from "@/components/AdminNavbar";
+import AnalyticsCards from "@/components/AnalyticsCards";
+import DashboardToggleView from "@/components/DashboardToggleView";
 async function getData() {
   const orders = await prisma.order.findMany({
     include: {
@@ -42,8 +44,15 @@ export default async function DashboardPage() {
   return (
     <main className="min-h-screen p-6">
       <AdminNavbar />
+      <DashboardToggleView
+        orders={orders}
+        assistanceRequests={assistanceRequests}
+      />
       <AdminProtected />
-      <PendingOrdersQueue orders={orders} />
+      <DashboardToggleView
+        orders={orders}
+        assistanceRequests={assistanceRequests}
+      />
       <DashboardAutoRefresh />
       <h1 className="text-4xl font-bold text-white mb-8">
         Chaat Adda Dashboard
@@ -59,7 +68,10 @@ export default async function DashboardPage() {
       </div>
 
       {/* Orders */}
-      <DashboardClient orders={orders} />
+      <DashboardToggleView
+        orders={orders}
+        assistanceRequests={assistanceRequests}
+      />
     </main>
   );
 }

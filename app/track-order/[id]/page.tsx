@@ -3,6 +3,7 @@ import OrderStatusNotifier from "@/components/OrderStatusNotifier";
 import TrackAutoRefresh from "@/components/TrackAutoRefresh";
 import Card from "@/components/ui/Card";
 import CancelOrderButton from "@/components/CancelOrderButton";
+
 async function getOrder(id: number) {
   return prisma.order.findUnique({
     where: { id },
@@ -34,7 +35,8 @@ export default async function TrackOrderPage({
     );
   }
 
-  const steps = ["Pending", "Preparing", "Completed"];
+  const steps = ["Pending", "Preparing", "Ready To Serve", "Completed"];
+
   const currentStep = steps.indexOf(order.status);
 
   return (
@@ -42,10 +44,7 @@ export default async function TrackOrderPage({
       <TrackAutoRefresh />
 
       <OrderStatusNotifier orderId={order.id} initialStatus={order.status} />
-      {order.status === "Pending" &&
-        Date.now() - new Date(order.createdAt).getTime() < 30000 && (
-          <CancelOrderButton orderId={order.id} />
-        )}
+
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white">Track Your Order</h1>
@@ -81,7 +80,7 @@ export default async function TrackOrderPage({
                 </div>
 
                 <p
-                  className={`text-sm mt-2 ${
+                  className={`text-xs sm:text-sm mt-2 ${
                     index <= currentStep ? "text-white" : "text-slate-500"
                   }`}
                 >
@@ -97,13 +96,23 @@ export default async function TrackOrderPage({
 
               {order.status === "Preparing" && "Your order is being prepared."}
 
-              {order.status === "Completed" &&
+              {order.status === "Ready To Serve" &&
                 "Your order is ready and will be served soon."}
+
+              {order.status === "Completed" &&
+                "Your order has been completed. Thank you!"}
 
               {order.status === "Rejected" &&
                 "Sorry, this order was rejected. Please contact counter."}
+
+              {order.status === "Cancelled" && "Your order has been cancelled."}
             </p>
           </div>
+
+          {order.status === "Pending" &&
+            Date.now() - new Date(order.createdAt).getTime() < 30000 && (
+              <CancelOrderButton orderId={order.id} />
+            )}
         </Card>
 
         <Card>

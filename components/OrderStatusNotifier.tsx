@@ -32,7 +32,11 @@ export default function OrderStatusNotifier({
           setPopupMessage("Your order is now being prepared.");
         }
 
-        if (newStatus === "Completed" || newStatus === "Ready") {
+        if (
+          newStatus === "Ready To Serve" ||
+          newStatus === "Completed" ||
+          newStatus === "Ready"
+        ) {
           popupOpenRef.current = true;
           setPopupMessage("Your order is ready and will be served soon.");
         }
