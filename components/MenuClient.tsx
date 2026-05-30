@@ -116,7 +116,11 @@ export default function MenuClient({
         sessionId,
       }),
     });
-
+    if (!response.ok) {
+      const data = await response.json();
+      alert(data.error || "Failed to place order");
+      return;
+    }
     if (response.ok) {
       const data = await response.json();
 

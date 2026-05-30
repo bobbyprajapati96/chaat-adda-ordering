@@ -7,9 +7,16 @@ export async function PATCH(req: Request) {
 
     const { orderId, status } = body;
 
+    if (!orderId || !status) {
+      return NextResponse.json(
+        { error: "Order ID and status are required" },
+        { status: 400 }
+      );
+    }
+
     const updatedOrder = await prisma.order.update({
       where: {
-        id: orderId,
+        id: Number(orderId),
       },
       data: {
         status,
@@ -21,7 +28,7 @@ export async function PATCH(req: Request) {
     console.log(error);
 
     return NextResponse.json(
-      { error: "Something went wrong" },
+      { error: "Failed to update order status" },
       { status: 500 }
     );
   }

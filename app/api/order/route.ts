@@ -10,7 +10,20 @@ export async function POST(req: Request) {
     if (!cart || cart.length === 0) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
+    if (sessionId) {
+      const session = await prisma.tableSession.findUnique({
+        where: {
+          id: Number(sessionId),
+        },
+      });
 
+      if (!session || session.status !== "Active") {
+        return NextResponse.json(
+          { error: "This table session has ended" },
+          { status: 400 }
+        );
+      }
+    }
     const order = await prisma.order.create({
       data: {
         tableNo: Number(tableNo),
