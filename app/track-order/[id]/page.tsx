@@ -3,7 +3,7 @@ import OrderStatusNotifier from "@/components/OrderStatusNotifier";
 import TrackAutoRefresh from "@/components/TrackAutoRefresh";
 import Card from "@/components/ui/Card";
 import CancelOrderButton from "@/components/CancelOrderButton";
-
+import ViewBillButton from "@/components/ViewBillButton";
 async function getOrder(id: number) {
   return prisma.order.findUnique({
     where: { id },
@@ -139,6 +139,10 @@ export default async function TrackOrderPage({
             ))}
           </div>
         </Card>
+        {(order.status === "Ready To Serve" ||
+          order.status === "Completed") && (
+          <ViewBillButton sessionId={order.sessionId || undefined} />
+        )}
       </div>
     </main>
   );

@@ -5,6 +5,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
 
   const tableNo = Number(searchParams.get("tableNo"));
+  const sessionId = Number(searchParams.get("sessionId"));
 
   if (Number.isNaN(tableNo)) {
     return NextResponse.json(
@@ -16,6 +17,11 @@ export async function GET(req: Request) {
   const orders = await prisma.order.findMany({
     where: {
       tableNo,
+      ...(sessionId
+        ? {
+            sessionId,
+          }
+        : {}),
     },
     include: {
       items: {

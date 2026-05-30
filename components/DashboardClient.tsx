@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-
+import CloseSessionButton from "@/components/CloseSessionButton";
 export default function DashboardClient({ orders }: { orders: any[] }) {
   const router = useRouter();
 
@@ -86,7 +86,9 @@ export default function DashboardClient({ orders }: { orders: any[] }) {
             >
               Completed
             </Button>
-
+            {order.status === "Completed" && (
+              <CloseSessionButton sessionId={order.sessionId} />
+            )}
             <Button
               onClick={() => updateStatus(order.id, "Rejected")}
               variant="danger"

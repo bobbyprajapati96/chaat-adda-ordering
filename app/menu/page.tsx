@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import MenuClient from "@/components/MenuClient";
 import TableOrdersHistory from "@/components/TableOrdersHistory";
+
 async function getMenuItems() {
   return prisma.menuItem.findMany({
     where: {
@@ -17,11 +18,16 @@ export default async function MenuPage({
 }: {
   searchParams: Promise<{
     table?: string;
+    sessionId?: string;
   }>;
 }) {
   const params = await searchParams;
+
   const menuItems = await getMenuItems();
+
   const tableNo = Number(params.table) || 1;
+
+  const sessionId = params.sessionId ? Number(params.sessionId) : undefined;
 
   return (
     <main className="min-h-screen p-3 pb-28 overflow-x-hidden">
@@ -42,8 +48,14 @@ export default async function MenuPage({
           </div>
         </div>
       </div>
-      <TableOrdersHistory tableNo={tableNo} />
-      <MenuClient menuItems={menuItems} tableNo={tableNo} />
+
+      <TableOrdersHistory tableNo={tableNo} sessionId={sessionId} />
+
+      <MenuClient
+        menuItems={menuItems}
+        tableNo={tableNo}
+        sessionId={sessionId}
+      />
     </main>
   );
 }

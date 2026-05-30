@@ -3,14 +3,23 @@
 import { useEffect, useState } from "react";
 import Card from "@/components/ui/Card";
 
-export default function TableOrdersHistory({ tableNo }: { tableNo: number }) {
+export default function TableOrdersHistory({
+  tableNo,
+  sessionId,
+}: {
+  tableNo: number;
+  sessionId?: number;
+}) {
   const [orders, setOrders] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
 
   const fetchOrders = async () => {
-    const res = await fetch(`/api/table-orders?tableNo=${tableNo}`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `/api/table-orders?tableNo=${tableNo}&sessionId=${sessionId}`,
+      {
+        cache: "no-store",
+      }
+    );
 
     const data = await res.json();
     setOrders(data);
@@ -22,7 +31,7 @@ export default function TableOrdersHistory({ tableNo }: { tableNo: number }) {
     const interval = setInterval(fetchOrders, 5000);
 
     return () => clearInterval(interval);
-  }, [tableNo]);
+  }, [tableNo, sessionId]);
 
   if (orders.length === 0) return null;
 

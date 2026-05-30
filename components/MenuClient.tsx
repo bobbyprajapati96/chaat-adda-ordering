@@ -7,9 +7,11 @@ import Button from "@/components/ui/Button";
 export default function MenuClient({
   menuItems,
   tableNo,
+  sessionId,
 }: {
   menuItems: any[];
   tableNo: number;
+  sessionId?: number;
 }) {
   const [cart, setCart] = useState<any[]>([]);
   const [showCart, setShowCart] = useState(false);
@@ -89,7 +91,8 @@ export default function MenuClient({
       },
       body: JSON.stringify({
         tableNo,
-        request: requestType,
+        cart,
+        sessionId,
       }),
     });
 
@@ -110,6 +113,7 @@ export default function MenuClient({
       body: JSON.stringify({
         tableNo,
         cart,
+        sessionId,
       }),
     });
 

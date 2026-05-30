@@ -23,7 +23,18 @@ model MenuItem {
   orderItems OrderItem[]
 }
 
+model TableSession {
+  id        Int      @id @default(autoincrement())
+  tableNo   Int
+  status    String   @default("Active")
+  createdAt DateTime @default(now())
+  closedAt  DateTime?
+
+  orders    Order[]
+}
+
 model Order {
+  
   id        Int         @id @default(autoincrement())
   tableId   Int?
   status    String      @default("Pending")
@@ -31,6 +42,8 @@ model Order {
   tableNo   Int
   table     Table?      @relation(fields: [tableId], references: [id])
   items     OrderItem[]
+  sessionId Int? 
+  session   TableSession? @relation(fields: [sessionId], references: [id])
 }
 
 model OrderItem {
