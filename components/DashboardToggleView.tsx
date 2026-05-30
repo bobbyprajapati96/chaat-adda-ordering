@@ -47,8 +47,8 @@ export default function DashboardToggleView({
       {view === "orders" && (
         <>
           <PendingOrdersQueue orders={orders} />
-          <CompletedOrdersHistory orders={orders} />
           <DashboardClient orders={orders} />
+          <CompletedOrdersHistory orders={orders} />
         </>
       )}
 

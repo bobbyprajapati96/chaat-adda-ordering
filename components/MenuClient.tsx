@@ -17,6 +17,7 @@ export default function MenuClient({
   const [showCart, setShowCart] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [orderSuccess, setOrderSuccess] = useState<any>(null);
 
   useEffect(() => {
     document.body.style.overflow = showCart ? "hidden" : "";
@@ -91,8 +92,7 @@ export default function MenuClient({
       },
       body: JSON.stringify({
         tableNo,
-        cart,
-        sessionId,
+        request: requestType,
       }),
     });
 
@@ -116,20 +116,18 @@ export default function MenuClient({
         sessionId,
       }),
     });
+
     if (!response.ok) {
       const data = await response.json();
       alert(data.error || "Failed to place order");
       return;
     }
-    if (response.ok) {
-      const data = await response.json();
 
-      alert("Order placed successfully!");
-      setCart([]);
-      setShowCart(false);
+    const data = await response.json();
 
-      window.location.href = `/track-order/${data.id}`;
-    }
+    setOrderSuccess(data);
+    setCart([]);
+    setShowCart(false);
   };
 
   return (
@@ -177,6 +175,53 @@ export default function MenuClient({
           ))}
         </div>
       </Card>
+
+      {orderSuccess && (
+        <div className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-950 border border-orange-500/40 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl">
+            <div className="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-5 text-4xl">
+              ✅
+            </div>
+
+            <h2 className="text-3xl font-bold text-white mb-2">
+              Order Placed!
+            </h2>
+
+            <p className="text-slate-400 mb-4">
+              Thank you for ordering from Chaat Adda.
+            </p>
+
+            <div className="bg-slate-900 rounded-2xl p-4 mb-4">
+              <p className="text-slate-400 text-sm">Order ID</p>
+              <p className="text-2xl font-bold text-orange-400">
+                #{orderSuccess.id}
+              </p>
+            </div>
+
+            <p className="text-slate-400 text-sm mb-5">
+              Your order has been sent to the kitchen.
+            </p>
+
+            <div className="space-y-3">
+              <button
+                onClick={() =>
+                  (window.location.href = `/track-order/${orderSuccess.id}`)
+                }
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-2xl font-bold text-lg"
+              >
+                Track Order
+              </button>
+
+              <button
+                onClick={() => setOrderSuccess(null)}
+                className="w-full bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-2xl font-bold"
+              >
+                Continue Ordering
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {cart.length > 0 && !showCart && (
         <button
