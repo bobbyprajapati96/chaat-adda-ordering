@@ -32,7 +32,12 @@ export default function AdminNavbar() {
         >
           Menu
         </Link>
-
+        <Link
+          href="/admin/kitchen"
+          className="bg-slate-800 text-white px-4 py-2 rounded-xl hover:bg-orange-500 transition"
+        >
+          Kitchen
+        </Link>
         <Link
           href="/admin/qr"
           className="bg-slate-800 text-white px-4 py-2 rounded-xl hover:bg-orange-500 transition"

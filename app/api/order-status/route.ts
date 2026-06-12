@@ -3,16 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(req: Request) {
   try {
-    const body = await req.json();
-
-    const { orderId, status } = body;
-
-    if (!orderId || !status) {
-      return NextResponse.json(
-        { error: "Order ID and status are required" },
-        { status: 400 }
-      );
-    }
+    const { orderId, status } = await req.json();
 
     const updatedOrder = await prisma.order.update({
       where: {

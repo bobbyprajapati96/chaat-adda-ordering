@@ -4,6 +4,7 @@ import DashboardAutoRefresh from "@/components/DashboardAutoRefresh";
 import AdminProtected from "@/components/AdminProtected";
 import AdminNavbar from "@/components/AdminNavbar";
 import DashboardToggleView from "@/components/DashboardToggleView";
+import NewOrderPopup from "@/components/NewOrderPopup";
 
 async function getData() {
   const orders = await prisma.order.findMany({
@@ -19,14 +20,15 @@ async function getData() {
     },
   });
 
-  const assistanceRequests = await prisma.assistanceRequest.findMany({
-    where: {
-      status: "Pending",
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const assistanceRequests =
+    await prisma.assistanceRequest.findMany({
+      where: {
+        status: "Pending",
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
   return {
     orders,
@@ -42,6 +44,8 @@ export default async function DashboardPage() {
       <AdminProtected />
       <DashboardAutoRefresh />
       <AdminNavbar />
+
+      <NewOrderPopup orders={orders} />
 
       <h1 className="text-4xl font-bold text-white mb-8">
         Chaat Adda Dashboard

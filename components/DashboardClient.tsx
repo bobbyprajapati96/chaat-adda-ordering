@@ -83,7 +83,10 @@ export default function DashboardClient({ orders }: { orders: any[] }) {
           <Card key={order.id}>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                  {order.status === "Pending" && (
+                    <span className="animate-pulse text-red-500">🔴</span>
+                  )}
                   Table {order.tableNo}
                 </h2>
 
